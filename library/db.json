@@ -1,0 +1,23 @@
+{
+  "1": {
+    "id": 1,
+    "title": "man",
+    "author": "Ilya",
+    "year": 1975,
+    "status": "in stock"
+  },
+  "2": {
+    "id": 2,
+    "title": "man",
+    "author": "Ilya",
+    "year": 1975,
+    "status": "out stock"
+  },
+  "3": {
+    "id": 3,
+    "title": "man",
+    "author": "Ilya",
+    "year": 1975,
+    "status": "out stock"
+  }
+}

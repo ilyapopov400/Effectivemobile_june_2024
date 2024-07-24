@@ -18,7 +18,17 @@ class BookShelf:
                 content = dict()
                 json.dump(content, f)
 
-    def set_book(self, title: str, author: str, year: int, status: bool):
+    def __get_data_from_db(self):
+        """
+
+        :return: словарь с данными из файла json с БД
+        """
+        with open(file=self.db, mode="r") as f:
+            data = f.read()
+            data = json.loads(data)
+        return data
+
+    def set_book(self, title: str, author: str, year: int, status: str = "in stock"):
         """
         - записываем в БД книгу
         :param title:
@@ -27,9 +37,9 @@ class BookShelf:
         :param status:
         :return:
         """
-        with open(file=self.db, mode="r") as f:
-            data = f.read()
-            data = json.loads(data)
+        data = self.__get_data_from_db()
+        if status not in ("in stock", "out stock"):
+            raise ValueError("status может принимать значения только 'in stock', 'out stock'")
 
         with open(file=self.db, mode="w") as f:
             if not data:
@@ -55,9 +65,7 @@ class BookShelf:
         :return:
         """
         id = str(id)
-        with open(file=self.db, mode="r") as f:
-            data = f.read()
-            data = json.loads(data)
+        data = self.__get_data_from_db()
 
         with open(file=self.db, mode="w") as f:
             try:
@@ -67,8 +75,69 @@ class BookShelf:
                 print("Нет книги с идентификатором {}".format(id))
             json.dump(data, f, indent=2)
 
+    def get_book(self, title: str = None,
+                 author: str = None,
+                 year: int = None,
+                 status: str = None):
+        """
+        - поиск книги по параметрам
+        :param title:
+        :param author:
+        :param year:
+        :param status:
+        :return:
+        """
+        result_id, result = set(), list()
+        data = self.__get_data_from_db()
+        print(title, author, year, status)
+        for book in data.values():
+            if title == book.get("title"):
+                result_id.add(book.get("id"))
+            if author == book.get("author"):
+                result_id.add(book.get("id"))
+            if year == book.get("year"):
+                result_id.add(book.get("id"))
+            if status == book.get("status"):
+                result_id.add(book.get("id"))
+
+        for id in result_id:
+            result.append(
+                data.get(str(id))
+            )
+
+        for _ in range(len(result)):
+            for i in range(len(result)):
+                book = result[i]
+                if title and book.get("title") != title:
+                    result.pop(i)
+                    break
+
+        for _ in range(len(result)):
+            for i in range(len(result)):
+                book = result[i]
+                if author and book.get("author") != author:
+                    result.pop(i)
+                    break
+
+        for _ in range(len(result)):
+            for i in range(len(result)):
+                book = result[i]
+                if year and book.get("year") != year:
+                    result.pop(i)
+                    break
+
+        for _ in range(len(result)):
+            for i in range(len(result)):
+                book = result[i]
+                if status and book.get("status") != status:
+                    result.pop(i)
+                    break
+
+        return result
+
 
 if __name__ == "__main__":
     bookshelf = BookShelf()
-    bookshelf.set_book(title="man", author="Ilya", year=1975, status=True)
-    bookshelf.del_book(id=1)
+    # bookshelf.set_book(title="man", author="Ilya", year=1975, status='out stock')
+    # bookshelf.del_book(id=2)
+    print(*bookshelf.get_book(title="man", status='in stock'), sep="\n")
