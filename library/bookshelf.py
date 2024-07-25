@@ -75,10 +75,7 @@ class BookShelf:
                 print("Нет книги с идентификатором {}".format(id))
             json.dump(data, f, indent=2)
 
-    def get_book(self, title: str = None,
-                 author: str = None,
-                 year: int = None,
-                 status: str = None):
+    def get_book(self, title: str = None, author: str = None, year: int = None, status: str = None):
         """
         - поиск книги по параметрам
         :param title:
@@ -89,7 +86,6 @@ class BookShelf:
         """
         result_id, result = set(), list()
         data = self.__get_data_from_db()
-        print(title, author, year, status)
         for book in data.values():
             if title == book.get("title"):
                 result_id.add(book.get("id"))
@@ -132,12 +128,16 @@ class BookShelf:
                 if status and book.get("status") != status:
                     result.pop(i)
                     break
-
         return result
+
+    def show_books(self):
+        data = self.__get_data_from_db()
+        return list(data.values())
 
 
 if __name__ == "__main__":
     bookshelf = BookShelf()
     # bookshelf.set_book(title="man", author="Ilya", year=1975, status='out stock')
     # bookshelf.del_book(id=2)
-    print(*bookshelf.get_book(title="man", status='in stock'), sep="\n")
+    print(*bookshelf.get_book(title="man", status='out stock'), sep="\n")
+    # print(*bookshelf.show_books(), sep="\n")
