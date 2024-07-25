@@ -4,20 +4,20 @@
     "title": "man",
     "author": "Ilya",
     "year": 1975,
-    "status": "in stock"
+    "status": "out stock"
   },
   "2": {
     "id": 2,
-    "title": "man",
-    "author": "Ilya",
-    "year": 1975,
+    "title": "woman",
+    "author": "Vera",
+    "year": 1971,
     "status": "out stock"
   },
   "3": {
     "id": 3,
-    "title": "man",
-    "author": "Ilya",
-    "year": 1975,
-    "status": "out stock"
+    "title": "girl",
+    "author": "Dasha",
+    "year": 2002,
+    "status": "in stock"
   }
 }
