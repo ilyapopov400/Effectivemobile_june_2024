@@ -1,23 +1,16 @@
 {
   "1": {
     "id": 1,
-    "title": "man",
-    "author": "Ilya",
-    "year": 1975,
-    "status": "out stock"
+    "title": "hello",
+    "author": "world",
+    "year": 1209,
+    "status": "in stock"
   },
   "2": {
     "id": 2,
-    "title": "woman",
-    "author": "Vera",
-    "year": 1971,
+    "title": "world",
+    "author": "hello",
+    "year": 1111,
     "status": "out stock"
-  },
-  "3": {
-    "id": 3,
-    "title": "girl",
-    "author": "Dasha",
-    "year": 2002,
-    "status": "in stock"
   }
 }
