@@ -18,7 +18,7 @@ class BookShelf:
                 content = dict()
                 json.dump(content, f)
 
-    def __get_data_from_db(self) -> dict:
+    def get_data_from_db(self) -> dict:
         """
 
         :return: словарь с данными из файла json с БД
@@ -37,9 +37,13 @@ class BookShelf:
         :param status:
         :return:
         """
-        data = self.__get_data_from_db()
+        data = self.get_data_from_db()
         if status not in ("in stock", "out stock"):
             raise ValueError("status может принимать значения только 'in stock', 'out stock'")
+        if not all((
+                bool(title), bool(author), bool(year))
+        ):
+            raise ValueError("Недостаточно передано данных")
 
         with open(file=self.db, mode="w") as f:
             if not data:
@@ -65,7 +69,7 @@ class BookShelf:
         :return:
         """
         id = str(id)
-        data = self.__get_data_from_db()
+        data = self.get_data_from_db()
 
         with open(file=self.db, mode="w") as f:
             try:
@@ -85,7 +89,7 @@ class BookShelf:
         :return: list
         """
         result_id, result = set(), list()
-        data = self.__get_data_from_db()
+        data = self.get_data_from_db()
         for book in data.values():
             if title == book.get("title"):
                 result_id.add(book.get("id"))
@@ -135,7 +139,7 @@ class BookShelf:
         - возвращает список всех книг в виде dict
         :return: list
         """
-        data = self.__get_data_from_db()
+        data = self.get_data_from_db()
         return list(data.values())
 
     def changing_book_processing(self, id: int, new_status: str = "in stock") -> None:  # TODO
@@ -146,7 +150,7 @@ class BookShelf:
         """
         if new_status not in ("in stock", "out stock"):
             raise ValueError("status может принимать значения только 'in stock', 'out stock'")
-        data = self.__get_data_from_db()
+        data = self.get_data_from_db()
         data_list = list(data.values())
         result = list(filter(lambda x: x.get("id") == id, data_list))
         if not result:

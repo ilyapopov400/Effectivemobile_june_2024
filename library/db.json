@@ -1,16 +1,1 @@
-{
-  "1": {
-    "id": 1,
-    "title": "hello",
-    "author": "world",
-    "year": 1209,
-    "status": "in stock"
-  },
-  "2": {
-    "id": 2,
-    "title": "world",
-    "author": "hello",
-    "year": 1111,
-    "status": "out stock"
-  }
-}
+{}
