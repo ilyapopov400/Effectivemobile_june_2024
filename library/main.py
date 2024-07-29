@@ -13,6 +13,7 @@ class LibraryEngine:
             "3": self.__del_book_3,
             "4": self.__get_book_4,
             "5": self.__show_5,
+            "6": self.__changing_book_processing_6,
 
         }
 
@@ -145,6 +146,32 @@ class LibraryEngine:
         print("Книги в библиотеке:")
         for book in data:
             print(self.show_one_book(book=book))
+
+    def __changing_book_processing_6(self):
+        """
+        - Изменение статуса книги: Пользователь вводит id книги и новый статус (“в наличии” или “выдана”);
+        :return:
+        """
+        id_list = list(self.bookshelf.get_data_from_db())
+        if not bool(id_list):
+            print("В библиотеке нет книг")
+            return
+
+        print("В библиотеке есть книги с ID: ", ", ".join(id_list))
+
+        id_for_changing = input("Наберите ID для изменяемой книги: ")
+        if id_for_changing not in id_list:
+            print("Неверное значение для ID")
+            return
+        book_for_changing = self.bookshelf.get_data_from_db().get(id_for_changing)
+        print("Изменяемая книга: \n", self.show_one_book(book=book_for_changing))
+        status_new = input("Наберите новый статус для изменяемой книги: 1 - 'в наличие', 2 - 'выдана'): ")
+        if status_new == "1":
+            self.bookshelf.changing_book_processing(id=int(id_for_changing), new_status="in stock")
+        elif status_new == "2":
+            self.bookshelf.changing_book_processing(id=int(id_for_changing), new_status="out stock")
+        else:
+            print("Неверно выбрано значение")
 
     def run(self):
         print(self.__hello())
