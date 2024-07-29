@@ -12,6 +12,7 @@ class LibraryEngine:
             "2": self.__set_book_2,
             "3": self.__del_book_3,
             "4": self.__get_book_4,
+            "5": self.__show_5,
 
         }
 
@@ -130,6 +131,19 @@ class LibraryEngine:
             print("По Вашему запросу книг не найдено")
             return
         for book in result:
+            print(self.show_one_book(book=book))
+
+    def __show_5(self):
+        """
+        - Отображение всех книг: Приложение выводит список всех книг с их id, title, author, year и status
+        :return:
+        """
+        data = self.bookshelf.get_data_from_db().values()
+        if not data:
+            print("Нет книг в библиотеке")
+            return
+        print("Книги в библиотеке:")
+        for book in data:
             print(self.show_one_book(book=book))
 
     def run(self):
