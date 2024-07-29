@@ -11,6 +11,8 @@ class LibraryEngine:
             "1": self.__help_1,
             "2": self.__set_book_2,
             "3": self.__del_book_3,
+            "4": self.__get_book_4,
+
         }
 
     def __hello(self):
@@ -30,6 +32,24 @@ class LibraryEngine:
         """
         print(text)
         return text
+
+    @staticmethod
+    def show_one_book(book):
+        """
+        - данные об одной книге
+        :return:
+        """
+        id_book = book.get("id")
+        title = book.get("title")
+        author = book.get("author")
+        year = book.get("year")
+        status = book.get("status")
+        if status == "in stock":
+            status = "в наличие"
+        else:
+            status = "выдана"
+        return "id: {}, название: {}, автор: {}, год выпуска: {}, наличие в библиотеке: {}".format(id_book, title,
+                                                                                                   author, year, status)
 
     def __set_book_2(self) -> None:
         """
@@ -69,6 +89,48 @@ class LibraryEngine:
         except ValueError:
             print("Неверные данные")
             return
+
+    def __get_book_4(self):
+        """
+        - поиск книги: Пользователь может искать книги по title, author, year или status
+        :return:
+        """
+        len_book = len(self.bookshelf.get_data_from_db())
+        print("Сейчас в библиотеке {} книг".format(len_book))
+        if len_book == 0:
+            print("Подождите, сейчас книг в библиотеке нет")
+            return
+        title = input("Введите название книги или нажмите ввод: ")
+        author = input("Введите имя автора книги или нажмите ввод: ")
+        year = input("Введите год издания книги или нажмите ввод: ")
+        status = input("Введите статус книги или нажмите ввод: ")
+        if not title:
+            title = None
+        if not author:
+            author = None
+        if not year:
+            year = None
+        if not any(
+                (title, author, year, status)
+        ):
+            print("Неверные или недостаточные данные")
+            return
+        if year:
+            try:
+                year = int(year)
+            except ValueError:
+                return
+        if status and status not in ('in stock', 'out stock'):
+            print("status может принимать значения только 'in stock', 'out stock'")
+            return
+
+        result = self.bookshelf.get_book(title=title, author=author, year=year, status=status)
+        print("Найденные книги:")
+        if not result:
+            print("По Вашему запросу книг не найдено")
+            return
+        for book in result:
+            print(self.show_one_book(book=book))
 
     def run(self):
         print(self.__hello())
