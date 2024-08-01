@@ -7,6 +7,22 @@ from bookshelf import BookShelf
 
 
 class LibraryEngine:
+    __instance = None
+
+    def __new__(cls, *args, **kwargs):
+        """
+        - используем паттерн Singleton для создания только одного объекта этого класса
+        :param args:
+        :param kwargs:
+        """
+        if cls.__instance is None:
+            cls.__instance = super().__new__(cls)
+
+        return cls.__instance
+
+    def __del__(self):
+        self.__class__.__instance = None
+
     def __init__(self):
         self.bookshelf = BookShelf()
         self.command_dict = {
@@ -19,9 +35,10 @@ class LibraryEngine:
 
         }
 
-    def __hello(self):
-        text = "Добрый пожаловать в нашу библиотеку\n" + self.__help_1()
-        return text
+    @staticmethod
+    def hello():
+        text = "Добрый пожаловать в нашу библиотеку\n"
+        print(text)
 
     @staticmethod
     def __help_1():
@@ -175,21 +192,30 @@ class LibraryEngine:
         else:
             print("Неверно выбрано значение")
 
-    def run(self):
-        print(self.__hello())
-        while True:
-            command_to_execute = input(
-                "Наберите команду (цифра от 1 до 6 или нажмите ввод для окончания работы программы): ")
-            if not bool(command_to_execute):
-                print("До свидания")
-                break
-            if command_to_execute not in ("1", "2", "3", "4", "5", "6"):
-                print("Нет такой команды на выполнение")
-                continue
 
-            self.command_dict.get(command_to_execute)()  # вызов метода для исполнения
+def mane():
+    """
+    - обрабатываем вводные данные пользователя
+
+    :return:
+    """
+    library = LibraryEngine()
+    library.hello()
+    library.command_dict.get("1")()
+    while True:
+        command_to_execute = input(
+            "Наберите команду (цифра от 1 до {} или нажмите ввод для окончания работы программы): ".format(
+                len(library.command_dict)))
+        if not bool(command_to_execute):
+            print("До свидания")
+            break
+
+        if command_to_execute not in (map(str, range(1, len(library.command_dict) + 1))):
+            print("Нет такой команды на выполнение")
+            continue
+
+        library.command_dict.get(command_to_execute)()  # вызов метода для исполнения
 
 
 if __name__ == "__main__":
-    library = LibraryEngine()
-    library.run()
+    mane()
